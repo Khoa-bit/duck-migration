@@ -1,5 +1,5 @@
 # duck-migration
-**duck-migration** is a lightweight Go library for handling database migrations, inspired by [Goose](https://github.com/pressly/goose).
+**duck-migration** is a lightweight Go library for handling database migrations with zero-dependency, inspired by [Goose](https://github.com/pressly/goose).
 ## Built-in support drivers
 - [zombiezen/go-sqlite](https://github.com/zombiezen/go-sqlite)
 - [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
@@ -9,3 +9,5 @@
 - Simple and lightweight API.
 ## Notes
 - Only supports for 'up' migration.
+## Usage
+- Copy the `duck` package into your project
