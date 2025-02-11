@@ -1,4 +1,4 @@
-package main
+package tool
 
 import (
 	"fmt"
@@ -20,6 +20,10 @@ func FormatRed(in string) string {
 
 func FormatYellow(in string) string {
 	return color(33, in)
+}
+
+func FormatGreen(in string) string {
+	return color(32, in)
 }
 
 func FormatBrightBlack(in string) string {
