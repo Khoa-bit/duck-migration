@@ -1,6 +1,11 @@
 package main
 
-import "zombiezen.com/go/sqlite"
+import (
+	"fmt"
+
+	"zombiezen.com/go/sqlite"
+	"zombiezen.com/go/sqlite/sqlitex"
+)
 
 var _ Store = (*StoreSqliteZombiezen)(nil)
 
@@ -10,37 +15,37 @@ type StoreSqliteZombiezen struct {
 
 // CreateTableIfNotExist implements Store.
 func (s *StoreSqliteZombiezen) CreateTableIfNotExist(tableName string) error {
-	q := `CREATE TABLE %s (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+	q := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s (
+		id         INTEGER PRIMARY KEY AUTOINCREMENT,
 		version_id INTEGER NOT NULL,
-		is_applied INTEGER NOT NULL,
-		tstamp TIMESTAMP DEFAULT (datetime('now'))
-	)`
-	_, err := s.conn.Exec("CREATE TABLE IF NOT EXISTS " + tableName + " (version_id INTEGER PRIMARY KEY, is_applied BOOLEAN NOT NULL DEFAULT FALSE)")
-	return err
+		create_at  TIMESTAMP DEFAULT (datetime('now'))
+	)`, tableName)
+
+	return sqlitex.Execute(s.conn, q, nil)
 }
 
 // DeleteVersion implements Store.
-func (s *StoreSqliteZombiezen) DeleteVersion(tableName string) string {
-	panic("unimplemented")
+func (s *StoreSqliteZombiezen) DeleteVersion(tableName string, version int64) error {
+	q := fmt.Sprintf("DELETE FROM %s WHERE version_id = ?", tableName)
+	return sqlitex.Execute(s.conn, q)
 }
 
 // GetLatestVersion implements Store.
-func (s *StoreSqliteZombiezen) GetLatestVersion(tableName string) string {
+func (s *StoreSqliteZombiezen) GetLatestVersion(tableName string) (Migration, error) {
 	panic("unimplemented")
 }
 
 // GetMigrationByVersion implements Store.
-func (s *StoreSqliteZombiezen) GetMigrationByVersion(tableName string) string {
+func (s *StoreSqliteZombiezen) GetMigrationByVersion(tableName string, version int64) (Migration, error) {
 	panic("unimplemented")
 }
 
 // InsertVersion implements Store.
-func (s *StoreSqliteZombiezen) InsertVersion(tableName string) string {
+func (s *StoreSqliteZombiezen) InsertVersion(tableName string, version int64) (Migration, error) {
 	panic("unimplemented")
 }
 
 // ListMigrations implements Store.
-func (s *StoreSqliteZombiezen) ListMigrations(tableName string) string {
+func (s *StoreSqliteZombiezen) ListMigrations(tableName string) ([]Migration, error) {
 	panic("unimplemented")
 }

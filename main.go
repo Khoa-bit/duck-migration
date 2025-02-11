@@ -20,11 +20,6 @@ import (
 //go:embed migrations/*.sql
 var embedMigrations embed.FS
 
-type Migration struct {
-	Version int64  `validate:"min=1"`
-	Source  string `validate:"required"`
-}
-
 func main() {
 	// Open an in-memory database.
 	conn, err := sqlite.OpenConn(":memory:", sqlite.OpenReadWrite)
