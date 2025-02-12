@@ -2,8 +2,8 @@ package duck
 
 const TimeFormat = "2006-01-02T15:04:05.999Z"
 
-type DuckStore interface {
-	// CreateTable creates the table if it does not exist.
+type Store interface {
+	// DuckCreateTableIfNotExist CreateTable creates the table if it does not exist.
 	DuckCreateTableIfNotExist() error
 
 	// DuckInsertVersion inserts a new version entry.

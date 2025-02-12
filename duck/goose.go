@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func Up(duckStore DuckStore, migrationsFs fs.FS, dirpath string) {
+func Up(duckStore Store, migrationsFs fs.FS, dirpath string) {
 	collectedMigrations, err := collectSqlMigrations(migrationsFs, dirpath)
 	tool.Assert(err == nil, "failed to collect SQL migrations", "error", err, "dirpath", dirpath)
 

@@ -7,7 +7,7 @@ import (
 	"zombiezen.com/go/sqlite/sqlitex"
 )
 
-var _ DuckStore = (*StoreSqliteZombiezen)(nil)
+var _ Store = (*StoreSqliteZombiezen)(nil)
 
 type StoreSqliteZombiezen struct {
 	Conn *sqlite.Conn
@@ -55,7 +55,7 @@ func (s *StoreSqliteZombiezen) DuckListMigrations() ([]Migration, error) {
 	return migrations, err
 }
 
-// DuckExecuteMigration implements DuckStore.
+// DuckExecuteMigration implements Store.
 func (s *StoreSqliteZombiezen) DuckExecuteMigration(sqlMigration string) error {
 	return sqlitex.ExecuteScript(s.Conn, sqlMigration, nil)
 }

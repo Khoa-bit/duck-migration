@@ -16,7 +16,7 @@ type Migration struct {
 	Source    string
 }
 
-func (m *Migration) Up(duckStore DuckStore, migrationsFs fs.FS) error {
+func (m *Migration) Up(duckStore Store, migrationsFs fs.FS) error {
 	if m.Version <= 0 {
 		return fmt.Errorf("ERROR %v: invalid migration version", filepath.Base(m.Source))
 	}
@@ -28,7 +28,12 @@ func (m *Migration) Up(duckStore DuckStore, migrationsFs fs.FS) error {
 	if err != nil {
 		return fmt.Errorf("ERROR %v: failed to open SQL migration file: %w", filepath.Base(m.Source), err)
 	}
-	defer f.Close()
+	defer func() {
+		err := f.Close()
+		if err != nil {
+			err = fmt.Errorf("ERROR %v: failed to close SQL migration file: %w", filepath.Base(m.Source), err)
+		}
+	}()
 
 	buffer, err := io.ReadAll(f)
 	if err != nil {
@@ -53,7 +58,7 @@ func (m *Migration) Up(duckStore DuckStore, migrationsFs fs.FS) error {
 		return fmt.Errorf("ERROR %v: failed to execute SQL migration: %w", filepath.Base(m.Source), err)
 	}
 
-	duckStore.DuckInsertVersion(m.Version)
+	_, err = duckStore.DuckInsertVersion(m.Version)
 	if err != nil {
 		return fmt.Errorf("ERROR %v: failed to insert migration version: %w", filepath.Base(m.Source), err)
 	}
